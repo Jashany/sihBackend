@@ -4,6 +4,8 @@ const verifyUser = (req, res, next) => {
   try {
     const token = req.cookies.jwt;
 
+    // console.log("heko")
+
     if (!token) {
       return res.status(401).json({
         message: "Unauthorized, token missing",
@@ -13,7 +15,7 @@ const verifyUser = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
-
+    // console.log("decoded", decoded);
     next();
   } catch (error) {
     console.error("Token verification failed:", error);

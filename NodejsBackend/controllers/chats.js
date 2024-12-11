@@ -4,6 +4,31 @@ import extractInfo from "../utils/extractinfo";
 
 const MODEL_API = process.env.MODEL_API;
 
+export const getChats = async (req, res) => {
+  console.log("hello")
+  try {
+    const userId = req.user._id;
+    console.log("hello")
+    const chats = await Chats.find({
+      user: userId,
+    })
+
+    console.log(chats);
+
+    return res.status(200).json({
+      message: "Chats found",
+      success: true,
+      data: chats,
+    })
+  } catch (error) {
+    console.error("Error getting chats:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    }); 
+  }
+}
+
 export const createChat = async (req, res) => {
   try {
     const { chatId } = req.body;
@@ -46,9 +71,10 @@ export const createChat = async (req, res) => {
 export const getChat = async (req, res) => {
   try {
     const { chatId } = req.params;
+    console.log(chatId);
 
     const chat = await Chats.findOne({
-      chatId,
+      chatId:chatId,
     });
 
     if (chat) {
@@ -58,12 +84,18 @@ export const getChat = async (req, res) => {
         data: chat,
       });
     } else {
-      return res.status(404).json({
-        message: "Chat not found",
-        success: false,
+      const chat = await Chats.create({
+        chatId,
+        user: req.user._id,
+      })
+      return res.status(200).json({ 
+        message: "Chat created",
+        success: true,
+        data: chat,
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: "Internal Server Error",
       success: false,
@@ -101,29 +133,43 @@ export const updateChat = async (req, res) => {
       });
     }
 
+    const userMsg = {
+      user: userMessage,
+      ai: undefined,
+      timestamp: new Date(),
+    };
+
+    chat.chatHistory.push(userMsg);
+    await chat.save();
+
     // Send user message to external AI API
     let aiResponse;
+    let source;
     try {
       const aiApiResponse = await axios.post(
-        MODEL_API,
+        "http://127.0.0.1:8000/api/chat/",
         {
-          message: userMessage,
+          user_input: userMessage,
+          chat_history:[]
         }
       );
-      aiResponse = aiApiResponse.data.message; // Adjust based on the external API's response structure
+      source = aiApiResponse.data.doc_id
+      aiResponse = aiApiResponse.data.assistant_output; // Adjust based on the external API's response structure
     } catch (error) {
       console.error("Error calling external AI API:", error);
       return res.status(500).json({
         message: "Failed to fetch AI response",
         success: false,
+        data:chat
       });
     }
 
     // Update the chat history
     const newMessage = {
-      user: userMessage,
+      user: undefined,
       ai: {
         text: aiResponse,
+        sources: source
       },
       timestamp: new Date(),
     };
@@ -145,3 +191,29 @@ export const updateChat = async (req, res) => {
     });
   }
 };
+
+export const deleteChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    const chat = await Chats.findOneAndDelete({
+      chatId,
+    });
+
+    if (chat) {
+      return res.status(200).json({
+        message: "Chat deleted",
+        success: true,
+        data: chat,
+      });
+    } else {
+      return res.status(404).json({
+        message: "Chat not found",
+        success: false,
+      });
+    }
+
+  } catch (error) {
+
+  }
+}

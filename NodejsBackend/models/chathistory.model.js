@@ -31,7 +31,6 @@ const chatHistorySchema = new mongoose.Schema({
         {
             user : {
                 type: String,
-                
             },
             ai : AiChatHistory,
             timestamp : {
