@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import caseRouter from './routes/case.routes.js';
 
 
 dotenv.config();
@@ -15,10 +16,14 @@ app.use(express.json()); // Parse incoming JSON requests
 app.use(cors({ origin: "*", credentials: true })); // Enable CORS with credentials
 app.use(cookieParser()); // Parse cookies
 
+
+// Routes
+app.use('/api/cases', caseRouter);
+
 // Connect to MongoDB
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
+        await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

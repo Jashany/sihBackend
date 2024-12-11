@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
-import Case from "./models/case.model"; // Adjust the path to your Case model
+import Case from "../models/case.model";
 
-const folderPath = "./cases"; // Path to the folder containing JSON files
+const folderPath = "./case_files"; // Path to the folder containing JSON files
 
 // MongoDB connection URL
 const dbURL = process.env.MONGO_URL
@@ -11,7 +11,7 @@ const dbURL = process.env.MONGO_URL
 const seedCases = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(dbURL, {
+    await mongoose.connect("mongodb+srv://naman:toggledocs@cluster0.i89bdjl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/lawvista", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
