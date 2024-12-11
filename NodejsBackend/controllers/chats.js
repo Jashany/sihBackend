@@ -1,6 +1,5 @@
-import Chats from "../models/chathistory.model";
+import Chats from "../models/chathistory.model.js";
 import axios from "axios";
-import extractInfo from "../utils/extractinfo";
 
 const MODEL_API = process.env.MODEL_API;
 

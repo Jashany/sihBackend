@@ -1,4 +1,4 @@
-import Notebook from "../models/Notebook.js";
+import Notebook from "../models/notebook.model.js";
 import { v4 as uuidv4 } from "uuid";
 
 // Create a new notebook

@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-UserSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
         return next();
     }
@@ -25,7 +25,7 @@ UserSchema.pre("save", async function (next) {
     next();
 });
 
-UserSchema.methods.matchPassword = async function (enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
