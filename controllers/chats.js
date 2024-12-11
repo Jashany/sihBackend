@@ -85,12 +85,12 @@ export const updateChat = async (req, res) => {
     }
 
     // Find the chat by chatId
-    const chat = await Chats.findOne({ chatId });
+    let chat = await Chats.findOne({ chatId });
 
     if (!chat) {
-      return res.status(404).json({
-        message: "Chat not found",
-        success: false,
+      chat = await Chats.create({
+        chatId,
+        user: req.user._id,
       });
     }
 
