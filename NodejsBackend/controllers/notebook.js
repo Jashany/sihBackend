@@ -2,19 +2,38 @@ import Notebook from "../models/notebook.model.js";
 import { v4 as uuidv4 } from "uuid";
 
 // Create a new notebook
+export const getUserNotebooks = async (req, res) => {
+  try {
+    const user = req.user._id;
+    const notebooks = await Notebook.find({ user });
+    return res
+      .status(200)
+      .json({ message: "Notebooks retrieved", success: true, data: notebooks });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        message: "Error retrieving notebooks",
+        success: true,
+        error: error.message,
+      });
+  }
+};
+
 export const createNotebook = async (req, res) => {
   try {
     const notebookId = await uuidv4();
-
-    const { title, segments } = req.body;
-
     const user = req.user._id;
 
-    const notebook = new Notebook({ user, notebookId, title, segments });
+    const notebook = new Notebook({
+      user,
+      notebookId,
+      title: "Untitled Notebook",
+    });
     await notebook.save();
     res
       .status(201)
-      .json({ message: "Notebook created successfully", notebook });
+      .json({ message: "Notebook created successfully", data: notebook });
   } catch (error) {
     res
       .status(500)
@@ -26,7 +45,9 @@ export const createNotebook = async (req, res) => {
 export const getNotebook = async (req, res) => {
   try {
     const { id } = req.params;
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findOne({
+      notebookId: id,
+    });
 
     if (!notebook) {
       return res
@@ -34,7 +55,9 @@ export const getNotebook = async (req, res) => {
         .json({ success: false, message: "Notebook not found" });
     }
 
-    if (req.user._id !== notebook.user) {
+    console.log(req.user._id, notebook.user);
+    //notebook.user is a mongoose object, so we need to convert it to a string
+    if (notebook.user.toString() !== req.user._id) {
       return res
         .status(401)
         .json({ success: false, message: "Unauthorized, invalid user" });
@@ -42,6 +65,7 @@ export const getNotebook = async (req, res) => {
 
     res.status(200).json({ success: true, data: notebook });
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ message: "Error retrieving notebook", error: error.message });
@@ -151,23 +175,20 @@ export const updateSegment = async (req, res) => {
     const segment = notebook.segments.find(
       (seg) => seg.segmentId === segmentId
     );
-    if (!segment){
-
-        return res
+    if (!segment) {
+      return res
         .status(404)
         .json({ message: "Segment not found", success: false });
     }
 
     Object.assign(segment, updates);
     await notebook.save();
-    
-    res
-      .status(200)
-      .json({
-        message: "Segment updated successfully",
-        data: notebook,
-        success: true,
-      });
+
+    res.status(200).json({
+      message: "Segment updated successfully",
+      data: notebook,
+      success: true,
+    });
   } catch (error) {
     res
       .status(500)

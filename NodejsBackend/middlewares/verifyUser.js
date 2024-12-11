@@ -19,6 +19,7 @@ const verifyUser = (req, res, next) => {
     next();
   } catch (error) {
     console.error("Token verification failed:", error);
+    console.log("hello")
     return res.status(401).json({
       message: "Unauthorized, invalid token",
       success: false,
