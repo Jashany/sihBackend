@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 const AiChatHistory = {
     text : {
         type: String,
-        required: true,
     },
     sources : [
         {
@@ -14,6 +13,11 @@ const AiChatHistory = {
 }
 
 const chatHistorySchema = new mongoose.Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
     chatId : {
         type: String,
         required: true,
@@ -27,7 +31,7 @@ const chatHistorySchema = new mongoose.Schema({
         {
             user : {
                 type: String,
-                required: true,
+                
             },
             ai : AiChatHistory,
             timestamp : {
@@ -37,3 +41,7 @@ const chatHistorySchema = new mongoose.Schema({
         },
     ],
 });
+
+const Chats = mongoose.model("Chats", chatHistorySchema);
+
+export default Chats;

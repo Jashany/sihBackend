@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const notebookSchema = new mongoose.Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
     notebookId: {
         type: String,
         required: true,
@@ -18,7 +23,6 @@ const notebookSchema = new mongoose.Schema({
             },
             notes: {
                 type: String,
-                required: true,
             },
             document: {
                 type: mongoose.Schema.Types.ObjectId,
@@ -36,4 +40,3 @@ const notebookSchema = new mongoose.Schema({
 const Notebook = mongoose.model("Notebook", notebookSchema);
 
 export default Notebook;
-
