@@ -16,7 +16,7 @@ const app = express();
 
 // Middleware setup
 app.use(express.json()); // Parse incoming JSON requests
-app.use(cors({ origin: "*", credentials: true })); // Enable CORS with credentials
+app.use(cors({ origin: true, credentials: true })); // Enable CORS with credentials
 app.use(cookieParser()); // Parse cookies
 
 
