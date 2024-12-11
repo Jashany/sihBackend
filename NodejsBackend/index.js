@@ -8,6 +8,7 @@ import caseRouter from './routes/case.routes.js';
 import authRouter from './routes/auth.routes.js';
 import noteBookRouter from './routes/notebook.routes.js';
 import chatRouter from './routes/chat.routes.js';
+import docRouter from './routes/doc.routes.js';
 
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use('/api/cases', caseRouter);
 app.use("/api/auth", authRouter );
 app.use("/api/chat", chatRouter );
 app.use("/api/notebook", noteBookRouter );
+app.use("/api/doc", docRouter );
 
 
 // Connect to MongoDB
