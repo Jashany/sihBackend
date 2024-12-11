@@ -1,6 +1,6 @@
-import Chats from "../models/chathistory.model";
+import Chats from "../models/chathistory.model.js";
 import axios from "axios";
-import extractInfo from "../utils/extractinfo";
+import extractInfo from "../utils/extractinfo.js";
 
 const MODEL_API = process.env.MODEL_API;
 
@@ -145,3 +145,29 @@ export const updateChat = async (req, res) => {
     });
   }
 };
+
+export const deleteChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    const chat = await Chats.findOneAndDelete({
+      chatId,
+    });
+
+    if (chat) {
+      return res.status(200).json({
+        message: "Chat deleted",
+        success: true,
+        data: chat,
+      });
+    } else {
+      return res.status(404).json({
+        message: "Chat not found",
+        success: false,
+      });
+    }
+
+  } catch (error) {
+
+  }
+}

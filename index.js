@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import caseRouter from './routes/case.routes.js';
+import noteBookRouter from './routes/notebook.routes.js';
+import authRouter from './routes/auth.routes.js';
+import chatRouter from './routes/chat.routes.js';
 
 
 dotenv.config();
@@ -19,6 +22,10 @@ app.use(cookieParser()); // Parse cookies
 
 // Routes
 app.use('/api/cases', caseRouter);
+app.use('/api/chat', chatRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/notebook', noteBookRouter);
+
 
 // Connect to MongoDB
 const connectDB = async () => {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
-import Case from "../models/case.model";
+import Case from "../models/case.model.js";
 
 const folderPath = "./case_files"; // Path to the folder containing JSON files
 
