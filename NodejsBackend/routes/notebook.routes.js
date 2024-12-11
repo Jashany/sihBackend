@@ -3,17 +3,20 @@ import {
   addSegment,
   createNotebook,
   deleteNotebook,
+  deleteSegment,
   getNotebook,
   updateSegment,
-} from "../controllers/notebook";
+} from "../controllers/notebook.js";
+import verifyUser from "../middlewares/verifyUser.js";
 
-const router = express.Router();
+const noteBookRouter = express.Router();
 
-router.post("/create-notebook", createNotebook);
-router.get("/:id", getNotebook);
-router.delete("/:id", deleteNotebook);
-router.post("/:id/add-segment", addSegment);
-router.post("/:id/update-segment/:segmentId", updateSegment);
+noteBookRouter.post("/create-notebook",verifyUser, createNotebook);
+noteBookRouter.get("/:id",verifyUser, getNotebook);
+noteBookRouter.delete("/:id",verifyUser, deleteNotebook);
+noteBookRouter.post("/:id/add-segment",verifyUser, addSegment);
+noteBookRouter.post("/:id/update-segment/:segmentId", updateSegment);
+noteBookRouter.delete("/:id/delete-segment/:segmentId", verifyUser,deleteSegment);
 
 
-export default router;
+export default noteBookRouter;
