@@ -24,9 +24,8 @@ const notebookSchema = new mongoose.Schema({
             notes: {
                 type: String,
             },
-            document: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Document",
+            link: {
+                type: String,
             },
             created_at: {
                 type: Date,

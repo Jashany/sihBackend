@@ -19,7 +19,7 @@ noteBookRouter.get("/:id",verifyUser, getNotebook);
 
 noteBookRouter.delete("/:id",verifyUser, deleteNotebook);
 noteBookRouter.post("/:id/add-segment",verifyUser, addSegment);
-noteBookRouter.post("/:id/update-segment/:segmentId", updateSegment);
+noteBookRouter.put("/:id/update-segment/:segmentId", updateSegment);
 noteBookRouter.delete("/:id/delete-segment/:segmentId", verifyUser,deleteSegment);
 noteBookRouter.put("/:id/update-title",verifyUser, async (req, res) => {
   try {
