@@ -7,6 +7,9 @@ import math
 import numpy as np
 import re
 import operator
+from nltk.corpus import wordnet as wn
+from nltk.corpus import stopwords
+from nltk.corpus.reader.wordnet import WordNetError
 import nltk
 nltk.download('punkt')
 nltk.download('maxent_ne_chunker_tab')

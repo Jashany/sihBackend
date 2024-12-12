@@ -21,7 +21,7 @@ vectorstore = PineconeVectorStore(
     pinecone_api_key=pinecone_api_key,
 )
 
-llm = ChatGroq(model="llama3-8b-8192", groq_api_key=groq_api_key)
+llm = ChatGroq(model="llama3-8b-8192", groq_api_key=groq_api_key,temperature=0.7)
 
 retriever = vectorstore.as_retriever(
     search_type="similarity_score_threshold",
@@ -32,7 +32,6 @@ retriever = vectorstore.as_retriever(
 retrieval_prompt = ChatPromptTemplate.from_template(
     """
     You are an intelligent legal assistant who is specialised in answering user queries about commercial cases and laws.
-    React greetings with greetings.
     Use the given context and chat history to answer the user's question to the best of your capacity.
     Keep the answer to about 2 paragraphs maximum and no need to mention according to context in the answer.
     Don't answer outside the domain of commercial cases and law.

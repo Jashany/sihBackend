@@ -18,3 +18,22 @@ class SummaryInputSerializer(serializers.Serializer):
 
 class SummaryOutputSerializer(serializers.Serializer):
     summary_text = serializers.CharField()
+    paths = serializers.ListField(child=serializers.CharField())
+
+
+
+class LSI(serializers.Serializer):
+    input_text = serializers.CharField()
+
+
+class LSIResponseSerializer(serializers.Serializer):
+    statutes = serializers.DictField(
+        child=serializers.CharField()
+    )
+
+
+class StringProcessingSerializer(serializers.Serializer):
+    input_text = serializers.CharField()
+
+class StringProcessingResponseSerializer(serializers.Serializer):
+    result = serializers.CharField()
