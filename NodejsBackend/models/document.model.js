@@ -32,6 +32,10 @@ const documentSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  statutes:[{
+    title: { type: String },
+    description: { type: String },
+  }],
   created_at: {
     type: Date,
     default: Date.now,

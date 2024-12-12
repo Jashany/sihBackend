@@ -15,7 +15,7 @@ export const getDoc = async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await Document.findOne({
-        documentId: id,
+      documentId: id,
     });
 
     if (!doc) {
@@ -24,11 +24,7 @@ export const getDoc = async (req, res) => {
         .json({ success: false, message: "Document not found" });
     }
 
-    if (req.user._id !== doc.user.toString()) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Unauthorized, invalid user" });
-    }
+    
 
     res.status(200).json({ success: true, data: doc });
   } catch (error) {
