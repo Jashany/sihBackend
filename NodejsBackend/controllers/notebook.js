@@ -97,7 +97,9 @@ export const deleteNotebook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findOne({
+      notebookId: id,
+    });
 
     if (!notebook) {
       return res
@@ -105,7 +107,7 @@ export const deleteNotebook = async (req, res) => {
         .json({ success: false, message: "Notebook not found" });
     }
 
-    if (req.user._id !== notebook.user) {
+    if (req.user._id !== notebook.user.toString()) {
       return res
         .status(401)
         .json({ success: false, message: "Unauthorized, invalid user" });
@@ -129,24 +131,26 @@ export const deleteNotebook = async (req, res) => {
 export const addSegment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { notes, document } = req.body;
+    const { notes, link } = req.body;
 
     const segmentId = await uuidv4();
 
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findOne({
+      notebookId: id,
+    })
     if (!notebook) {
       return res
         .status(404)
         .json({ message: "Notebook not found", success: false });
     }
 
-    if (req.user._id !== notebook.user) {
+    if (req.user._id !== notebook.user.toString()) {
       return res
         .status(401)
         .json({ message: "Unauthorized, invalid user", success: false });
     }
 
-    notebook.segments.push({ segmentId, notes, document });
+    notebook.segments.push({ segmentId, notes, link });
     await notebook.save();
     res.status(200).json({
       message: "Segment added successfully",
@@ -165,7 +169,9 @@ export const updateSegment = async (req, res) => {
   try {
     const { id, segmentId } = req.params;
     const updates = req.body;
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findOne({
+      notebookId: id,
+    });
 
     if (!notebook)
       return res
@@ -200,13 +206,15 @@ export const updateSegment = async (req, res) => {
 export const deleteSegment = async (req, res) => {
   try {
     const { id, segmentId } = req.params;
-    const notebook = await Notebook.findById(id);
+    const notebook = await Notebook.findOne({
+      notebookId: id,
+    });
     if (!notebook)
       return res
         .status(404)
         .json({ message: "Notebook not found", success: false });
 
-    if (req.user._id !== notebook.user) {
+    if (req.user._id !== notebook.user.toString()) {
       return res
         .status(401)
         .json({ message: "Unauthorized, invalid user", success: false });

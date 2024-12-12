@@ -8,6 +8,6 @@ const docRouter = express.Router();
 docRouter.post("/",verifyUser, createDoc);
 docRouter.get("/",verifyUser, getUserDocs);
 docRouter.get("/:id",verifyUser, getDoc);
-docRouter.post("/update/:id",verifyUser, updateDoc);
+docRouter.put("/update/:id",verifyUser, updateDoc);
 
 export default docRouter;

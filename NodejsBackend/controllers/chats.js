@@ -164,7 +164,7 @@ export const updateChat = async (req, res) => {
       return null;
     }).filter(Boolean);
 
-    let history = aiChatHistory.slice(-256);
+    let history = aiChatHistory
     console.log(history);
 
     // Send user message to external AI API
