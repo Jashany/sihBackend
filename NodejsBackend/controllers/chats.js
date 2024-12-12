@@ -155,6 +155,18 @@ export const updateChat = async (req, res) => {
     chat.chatHistory.push(userMsg);
     await chat.save();
 
+    const aiChatHistory = chat.chatHistory.map((msg) => {
+      if (msg.user) {
+        return { role: "user", content: msg.user };
+      } else if (msg.ai && msg.ai.text) {
+        return { role: "assistant", content: msg.ai.text };
+      }
+      return null;
+    }).filter(Boolean);
+
+    let history = aiChatHistory.slice(-256);
+    console.log(history);
+
     // Send user message to external AI API
     let aiResponse;
     let source;
@@ -164,7 +176,7 @@ export const updateChat = async (req, res) => {
         "http://127.0.0.1:8000/api/chat/",
         {
           user_input: userMessage,
-          chat_history:[]
+          chat_history:history,
         }
       );
       response = aiApiResponse.data;
@@ -178,6 +190,9 @@ export const updateChat = async (req, res) => {
         data:chat
       });
     }
+
+    
+    
 
     // Update the chat history
     const newMessage = {
