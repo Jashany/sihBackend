@@ -140,7 +140,7 @@ export const addSegment = async (req, res) => {
         .json({ message: "Notebook not found", success: false });
     }
 
-    if (req.user._id !== notebook.user) {
+    if (req.user._id.toString() !== notebook.user.toString()) {
       return res
         .status(401)
         .json({ message: "Unauthorized, invalid user", success: false });
