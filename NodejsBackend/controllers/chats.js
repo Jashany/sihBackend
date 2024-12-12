@@ -3,6 +3,19 @@ import axios from "axios";
 
 const MODEL_API = process.env.MODEL_API;
 
+const chatdemo = {
+  "message": "Chat found",
+  "success": true,
+  "data": {
+      "_id": "675a37c3bb028b270debe3cd",
+      "user": "67598849e330532b239f4a29",
+      "chatId": "8826a73a-cd85-4013-af22-1ac23fb4aab7",
+      "ispinned": false,
+      "chatHistory": [],
+      "__v": 0
+  }
+}
+
 export const getChats = async (req, res) => {
   console.log("hello")
   try {
@@ -82,17 +95,18 @@ export const getChat = async (req, res) => {
         success: true,
         data: chat,
       });
-    } else {
-      const chat = await Chats.create({
-        chatId,
-        user: req.user._id,
-      })
-      return res.status(200).json({ 
-        message: "Chat created",
-        success: true,
-        data: chat,
-      });
-    }
+    } 
+
+
+    chatdemo.chatId = chatId;
+
+    return res.status(200).json({
+      message: "Chat not found",
+      success: true,
+      data: chatdemo
+    });
+
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -144,6 +158,7 @@ export const updateChat = async (req, res) => {
     // Send user message to external AI API
     let aiResponse;
     let source;
+    let response;
     try {
       const aiApiResponse = await axios.post(
         "http://127.0.0.1:8000/api/chat/",
@@ -152,6 +167,7 @@ export const updateChat = async (req, res) => {
           chat_history:[]
         }
       );
+      response = aiApiResponse.data;
       source = aiApiResponse.data.doc_id
       aiResponse = aiApiResponse.data.assistant_output; // Adjust based on the external API's response structure
     } catch (error) {
@@ -181,6 +197,7 @@ export const updateChat = async (req, res) => {
       message: "Chat updated",
       success: true,
       data: chat,
+      metadata: response
     });
   } catch (error) {
     console.error("Error updating chat:", error);

@@ -14,6 +14,11 @@ const documentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  paths:[
+    {
+      type: String,
+    }
+  ],
   judgement: {
     type: String,
   },
